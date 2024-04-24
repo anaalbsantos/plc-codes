@@ -1,3 +1,17 @@
+{- Defina uma função que calcula o máximo entre 
+3 valores e uma função para ver quantos são iguais -}
+maxiThree :: Int -> Int -> Int -> Int
+maxiThree m n p = max (max m n) p 
+
+equalCount :: Int -> Int -> Int -> Int -> Int
+equalCount x m n p
+    | x == m && x == n && x == p = 3
+    | x == m && x == n = 2
+    | x == m && x == p = 2
+    | x == p && x == n = 2
+    | otherwise = 1
+
+
 {- Defina uma função que, dado um valor inteiro s e
 um número de semanas n, retorna quantas
 semanas de 0 a n tiveram vendas iguais a s. Para
@@ -13,6 +27,14 @@ vendas 4 = 50
 vendas 5 = 60
 vendas n = 50
 
+totalVendas :: Int -> Int
+totalVendas 0 = vendas 0
+totalVendas n = totalVendas (n-1) + vendas n
+
+maxVendas :: Int -> Int
+maxVendas 0 = vendas 0
+maxVendas n = max (maxVendas (n-1)) (vendas n)
+
 semanasEqualx :: Int -> Int -> Int
 semanasEqualx x n
     | n == -1 = 0
@@ -23,9 +45,7 @@ semanasEqualx x n
 determina se ele é primo ou não. -}
 
 isDivisible :: Int -> Int -> Bool
-isDivisible x y
-    | mod x y == 0 = True
-    | otherwise = False
+isDivisible x y = (mod x y == 0)
 
 isPrime :: Int -> Bool
 isPrime n
@@ -68,3 +88,37 @@ allEqual x y z = (x == y) && (y == z)
 
 all4Equal :: Int -> Int -> Int -> Int -> Bool
 all4Equal x y z w = allEqual x y z && allEqual x y w
+
+{- Escreva uma função para retornar, em forma de tabela,
+todas as vendas da semana 0 até a semana n, incluindo
+o total e a média de vendas no período. Usem as
+funções definidas previamente e defina novas funções
+que achar necessário. -}
+
+addEspacos :: Int -> String
+addEspacos n
+    | n == 0 = ""
+    | otherwise = " " ++ addEspacos (n-1)
+
+paraDireita :: Int -> String -> String
+paraDireita x str = addEspacos x ++ str
+
+cabecalho :: String
+cabecalho = "Semana  Vendas\n"
+
+imprimeSemanas :: Int -> String
+imprimeSemanas n
+    | n == 0 = paraDireita 3 (show 0) ++ paraDireita 6 (show (vendas 0)) ++ "\n"
+    | otherwise = imprimeSemanas (n-1) ++ paraDireita 3 (show n) ++ paraDireita 6 (show (vendas n)) ++ "\n"
+
+imprimeTotal :: Int -> String
+imprimeTotal n = "Total    " ++ show (totalVendas n) ++ "\n"
+
+imprimeMedia :: Int -> String
+imprimeMedia n = "Média   " ++ show ( fromIntegral (totalVendas n) / fromIntegral n) ++ "\n"
+
+imprimeTabela :: Int -> IO()
+imprimeTabela n = putStr (cabecalho
+                  ++ imprimeSemanas n
+                  ++ imprimeTotal n
+                  ++ imprimeMedia n)
