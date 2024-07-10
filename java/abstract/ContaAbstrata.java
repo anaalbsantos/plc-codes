@@ -2,6 +2,7 @@
     classe abstrata
     * criada para ser herdada
     * não pode ser instanciada (não pode ser criado um objeto a partir dela)
+        obs: pode ser instanciado se for um array (ex: ContaAbstrata[] contas = new ContaAbstrata[10];)
     * pode ter métodos abstratos ou concretos
     * pelo menos um método abstrato que é apenas declarado e não implementado
     * método protegido (protected) é acessado somente pela classe ou por classes filhas
